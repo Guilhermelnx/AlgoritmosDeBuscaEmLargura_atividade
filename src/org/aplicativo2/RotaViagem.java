@@ -1,3 +1,5 @@
+package src.org.aplicativo2;
+
 import java.util.*;
 
 public class RotaViagem {

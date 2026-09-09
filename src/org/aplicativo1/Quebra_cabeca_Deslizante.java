@@ -1,3 +1,5 @@
+package src.org.aplicativo1;
+
 import java.util.*;
 
 public class Quebra_cabeca_Deslizante {
