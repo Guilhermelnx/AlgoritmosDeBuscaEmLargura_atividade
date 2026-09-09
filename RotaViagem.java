@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Main {
+public class RotaViagem {
     public static void main(String[] args) {
         String[] cidades = {
             "Aparecida de Goiânia",
