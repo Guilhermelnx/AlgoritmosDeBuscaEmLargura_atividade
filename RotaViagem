@@ -1,0 +1,102 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String[] cidades = {
+            "Aparecida de Goiânia",
+            "Goiânia",
+            "Trindade",
+            "Senador Canedo",
+            "Nerópolis",
+            "Anápolis",
+            "Pirenópolis"
+        };
+
+        int quantidadeCidades = cidades.length;
+
+        List<Integer>[] grafo = new ArrayList[quantidadeCidades];
+
+        for (int i = 0; i < quantidadeCidades; i++) {
+            grafo[i] = new ArrayList<>();
+        }
+
+        // Conexões bidirecionais
+        adicionarEstrada(grafo, 0, 1);
+        adicionarEstrada(grafo, 0, 3);
+        adicionarEstrada(grafo, 1, 2);
+        adicionarEstrada(grafo, 1, 4);
+        adicionarEstrada(grafo, 3, 5);
+        adicionarEstrada(grafo, 4, 5);
+        adicionarEstrada(grafo, 5, 6);
+
+        int origem = 0;
+        int destino = 6;
+
+        int[] distancia = new int[quantidadeCidades];
+        int[] anterior = new int[quantidadeCidades];
+
+        Arrays.fill(distancia, -1);
+        Arrays.fill(anterior, -1);
+
+        Queue<Integer> fila = new LinkedList<>();
+
+        distancia[origem] = 0;
+        fila.add(origem);
+
+        // Busca em largura
+        while (!fila.isEmpty()) {
+            int cidadeAtual = fila.poll();
+
+            if (cidadeAtual == destino) {
+                break;
+            }
+
+            for (int vizinha : grafo[cidadeAtual]) {
+                if (distancia[vizinha] == -1) {
+                    distancia[vizinha] = distancia[cidadeAtual] + 1;
+                    anterior[vizinha] = cidadeAtual;
+                    fila.add(vizinha);
+                }
+            }
+        }
+
+        if (distancia[destino] == -1) {
+            System.out.println("Não existe rota entre as cidades.");
+            return;
+        }
+
+        // Reconstrói o caminho encontrado
+        List<Integer> rota = new ArrayList<>();
+        int cidadeAtual = destino;
+
+        while (cidadeAtual != -1) {
+            rota.add(cidadeAtual);
+            cidadeAtual = anterior[cidadeAtual];
+        }
+
+        Collections.reverse(rota);
+
+        System.out.println("Menor rota:");
+
+        for (int i = 0; i < rota.size(); i++) {
+            System.out.print(cidades[rota.get(i)]);
+
+            if (i < rota.size() - 1) {
+                System.out.print(" -> ");
+            }
+        }
+
+        System.out.println();
+        System.out.println("Quantidade de saltos: " + distancia[destino]);
+        System.out.println("Cidades intermediárias: " + (rota.size() - 2));
+    }
+
+    private static void adicionarEstrada(
+            List<Integer>[] grafo,
+            int cidadeA,
+            int cidadeB
+    ) {
+        grafo[cidadeA].add(cidadeB);
+        grafo[cidadeB].add(cidadeA);
+    }
+}
